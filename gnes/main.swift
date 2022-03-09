@@ -24,6 +24,12 @@ var appConfig = [:] as Dictionary
 var payloadInfo = [:] as Dictionary
 var providerInfo = [:] as Dictionary
 var typeInfo = [:] as Dictionary
+var foundIdentifiers = [:] as Dictionary
+var foundContentFilterIdentifiers = [String]()
+var foundDnsProxyIdentifiers = [String]()
+var foundUnknownIdentifiers = [String]()
+var foundVPNIdentifiers = [String]()
+var debug = false
 var enabled = false
 var foundExtension = false
 let helpInfo = """
@@ -31,13 +37,16 @@ NAME
      gnes – Get Network Extension Status
 
 SYNOPSIS
-     gnes [-identifier identifier] [-type type] output
+     gnes -debug [-identifier identifier] [-type type] output
 
 DESCRIPTION
      The gnes command is used to read and print network extension status
 
 OPTIONS
      The options are as follows:
+
+     -debug
+             Optional: Returns all found bundle identifiers and type if passed identifier is not found
 
      -identifier
              Required: The bundle identifier of the network extension to query
@@ -63,12 +72,27 @@ if arguments.contains("-identifier") && arguments.contains("-type") {
     exit(1)
 }
 
+if arguments.contains("-identifier") {
+    debug = true
+}
+
 let sharedManager = NEConfigurationManager.self.shared()
 _ = sharedManager?.reloadFromDisk()
 let loadedConfigurations = sharedManager?.loadedConfigurations
 if loadedConfigurations != nil {
     for (_, value) in loadedConfigurations! as NSDictionary {
         let config = value as! NEConfiguration
+        if debug {
+            if config.contentFilter != nil {
+                foundContentFilterIdentifiers.append(config.application)
+            } else if config.dnsProxy != nil {
+                foundDnsProxyIdentifiers.append(config.application)
+            } else if config.vpn != nil {
+                foundVPNIdentifiers.append(config.application)
+            } else {
+                foundUnknownIdentifiers.append(config.application)
+            }
+        }
         if config.application == identifier && !foundExtension {
             if (config.contentFilter != nil) && type != "contentFilter" {
                 continue
@@ -188,7 +212,16 @@ if !appConfig.isEmpty {
         print(appConfig as AnyObject)
     }
 } else {
-    print("Did not find network extension!")
+    if debug {
+        print("Did not find network extension!")
+        foundIdentifiers["contentFilter"] = foundContentFilterIdentifiers
+        foundIdentifiers["dnsProxy"] = foundDnsProxyIdentifiers
+        foundIdentifiers["vpn"] = foundVPNIdentifiers
+        foundIdentifiers["unknown"] = foundUnknownIdentifiers
+        print(String(data: try! JSONSerialization.data(withJSONObject: foundIdentifiers, options: [.prettyPrinted, .sortedKeys]), encoding: .utf8)!)
+    } else {
+        print("Did not find network extension!")
+    }
 }
 
 //if let NetworkExtensionBundle = Bundle(path: "/System/Library/Frameworks/NetworkExtension.framework") {

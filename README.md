@@ -14,13 +14,16 @@ NAME
      gnes – Get Network Extension Status
 
 SYNOPSIS
-     gnes [-identifier identifier] [-type type] output
+     gnes -debug [-identifier identifier] [-type type] output
 
 DESCRIPTION
      The gnes command is used to read and print network extension status
 
 OPTIONS
      The options are as follows:
+
+     -debug
+             Optional: Returns all found bundle identifiers and type if passed identifier is not found
 
      -identifier
              Required: The bundle identifier of the network extension to query
@@ -144,4 +147,28 @@ sample output (enabled)
 ```shell
 gnes -identifier "com.crowdstrike.falcon.App" -type contentFilter -stdout-enabled
 true
+```
+
+Did not find extension
+```shell
+gnes -identifier "com.example.fake.contentFilter" -type contentFilter -debug
+Did not find network extension!
+```
+
+```json
+{
+  "contentFilter" : [
+    "com.crowdstrike.falcon.App",
+    "com.cisco.anyconnect.macos.acsock"
+  ],
+  "dnsProxy" : [
+    "com.cisco.anyconnect.macos.acsock"
+  ],
+  "unknown" : [
+
+  ],
+  "vpn" : [
+    "com.cisco.anyconnect.macos.acsock"
+  ]
+}
 ```

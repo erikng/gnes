@@ -1,6 +1,14 @@
 # gnes
 Get Network Extension Status
 
+# Use Case
+System Extensions have some data available at. `/Library/SystemExtensions/db.plist`. Unfortunately for Network System Extensions, much of the data, including if it's enabled is not available in this location. For example, a network extension can be loaded in memory, but not enabled.
+
+`/Library/Preferences/com.apple.networkextension.plist` exposes much of this data, but the plist is not in a standard format, which means that CFPreferences cannot adequately handle this data.
+
+This tool uses private headers to expose all of the required data and put it into an easily parsible format.
+
+# Usage
 ```
 NAME
      gnes – Get Network Extension Status
@@ -26,6 +34,7 @@ OPTIONS
                 -stdout-xml -stdout-json -stdout-enabled
 ```
 
+# Examples
 sample output (json)
 `gnes -identifier "com.crowdstrike.falcon.App" -type contentFilter -stdout-json`
 ```json

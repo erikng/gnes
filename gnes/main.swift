@@ -72,7 +72,7 @@ if arguments.contains("-identifier") && arguments.contains("-type") {
     exit(1)
 }
 
-if arguments.contains("-identifier") {
+if arguments.contains("-debug") {
     debug = true
 }
 

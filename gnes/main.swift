@@ -34,7 +34,7 @@ SYNOPSIS
      gnes [-identifier identifier] [-type type] output
 
 DESCRIPTION
-     The codesign command is used to read and print network extension status
+     The gnes command is used to read and print network extension status
 
 OPTIONS
      The options are as follows:

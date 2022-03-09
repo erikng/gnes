@@ -32,6 +32,7 @@ var foundVPNIdentifiers = [String]()
 var debug = false
 var enabled = false
 var foundExtension = false
+var rawConfig = NEConfiguration()
 let helpInfo = """
 NAME
      gnes – Get Network Extension Status
@@ -57,7 +58,7 @@ OPTIONS
 
      output
             Optional: Specific output formats:
-                -stdout-xml -stdout-json -stdout-enabled
+                -stdout-xml -stdout-json -stdout-enabled -stdout-raw
 """
 
 let arguments = CommandLine.arguments
@@ -94,6 +95,7 @@ if loadedConfigurations != nil {
             }
         }
         if config.application == identifier && !foundExtension {
+            rawConfig = config
             if (config.contentFilter != nil) && type != "contentFilter" {
                 continue
             } else if (config.dnsProxy != nil) && type != "dnsProxy" {
@@ -208,6 +210,8 @@ if !appConfig.isEmpty {
         print(String(data: try! JSONSerialization.data(withJSONObject: appConfig, options: [.prettyPrinted, .sortedKeys]), encoding: .utf8)!)
     } else if CommandLine.arguments.contains("-stdout-enabled") {
         print(enabled)
+    } else if CommandLine.arguments.contains("-stdout-raw") {
+        print(rawConfig)
     } else {
         print(appConfig as AnyObject)
     }

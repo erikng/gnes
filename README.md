@@ -34,7 +34,7 @@ OPTIONS
 
      output
             Optional: Specific output formats:
-                -stdout-xml -stdout-json -stdout-enabled
+                -stdout-xml -stdout-json -stdout-enabled -stdout-raw
 ```
 
 # Examples

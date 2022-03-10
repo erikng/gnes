@@ -7,6 +7,9 @@
 
 import Foundation
 import NetworkExtension
+// TODO: SystemExtension data https://developer.apple.com/documentation/systemextensions/ossystemextensionmanager/3295261-sharedmanager?language=objc
+import SystemExtensions
+let sharedSEManager = OSSystemExtensionManager.self.shared
 
 extension Date
 {
@@ -33,6 +36,9 @@ var debug = false
 var enabled = false
 var foundExtension = false
 var rawConfig = NEConfiguration()
+
+// TODO: support NEHotSpot and NEWifi?
+// TODO: Return if more network extensions are installed vs what the admin expects to see. Useful for finding unapproved DNS or VPN modules
 let helpInfo = """
 NAME
      gnes – Get Network Extension Status

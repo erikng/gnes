@@ -16,10 +16,8 @@
 	NSDictionary* _loadedConfigurations;
 }
 
-//+(id)sharedManager;
 +(NEConfigurationManager *)sharedManager;
 -(NSDictionary *)loadedConfigurations;
 @property (retain) NSDictionary * loadedConfigurations;                                //@synthesize loadedConfigurations=_loadedConfigurations - In the implementation block
 -(char)reloadFromDisk;
 @end
-

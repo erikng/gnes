@@ -22,11 +22,9 @@
     NEContentFilter* _contentFilter;
     NEVPN* _VPN;
     NEDNSProxy* _dnsProxy;
-    long long _appPermissionType;
 }
 
 @property (readonly) NSString * pluginType;
-@property (assign,nonatomic) long long appPermissionType;                  //@synthesize appPermissionType=_appPermissionType - In the implementation block
 @property (readonly) long long grade;                                      //@synthesize grade=_grade - In the implementation block
 @property (readonly) NSUUID * identifier;                                  //@synthesize identifier=_identifier - In the implementation block
 @property (copy) NSString * application;                                   //@synthesize application=_application - In the implementation block
@@ -38,8 +36,6 @@
 @property (copy) NEVPN * VPN;
 @property (copy) NEDNSProxy * dnsProxy;                          //@synthesize dnsProxy=_dnsProxy - In the implementation block                                   //@synthesize appPush=_appPush - In the implementation block
 @property (copy) NEProfileIngestionPayloadInfo * payloadInfo;              //@synthesize payloadInfo=_payloadInfo - In the implementation block
-+(void)addError:(id)arg1 toList:(id)arg2 ;
--(id)getConfigurationIdentifier;
 -(char)isEqual:(id)arg1 ;
 -(unsigned long long)hash;
 -(id)description;
@@ -51,4 +47,3 @@
 -(NEDNSProxy *)dnsProxy;
 -(NEProfileIngestionPayloadInfo *)payloadInfo;
 @end
-

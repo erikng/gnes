@@ -9,7 +9,6 @@
 @class NSArray, NEVPNProtocol;
 
 @interface NEVPN : NSObject <NSCopying> {
-
 	char _enabled;
 	char _onDemandEnabled;
 	char _disconnectOnDemandEnabled;
@@ -18,7 +17,6 @@
 	NEVPNProtocol* _protocol;
 	long long _tunnelType;
 	NSArray* _exceptionApps;
-
 }
 
 @property (copy) NSArray * exceptionApps;                                                                          //@synthesize exceptionApps=_exceptionApps - In the implementation block
@@ -29,22 +27,15 @@
 @property (copy) NSArray * onDemandRules;                                                                          //@synthesize onDemandRules=_onDemandRules - In the implementation block
 @property (copy) NEVPNProtocol * protocol;                                                                         //@synthesize protocol=_protocol - In the implementation block
 @property (assign) long long tunnelType;                                                                           //@synthesize tunnelType=_tunnelType - In the implementation block
--(char)checkValidityAndCollectErrors:(id)arg1 ;
 -(char)isOnDemandUserOverrideDisabled;
--(id)copyWithZone:(NSZone*)arg1 ;
 -(id)description;
 -(id)init;
--(void)encodeWithCoder:(id)arg1 ;
--(id)initWithCoder:(id)arg1 ;
 -(char)isEnabled;
 -(NEVPNProtocol *)protocol;
 -(long long)tunnelType;
--(id)copyLegacyDictionary;
 -(char)isOnDemandEnabled;
 -(char)isDisconnectOnDemandEnabled;
 -(NSArray *)exceptionApps;
--(id)descriptionWithIndent:(int)arg1 options:(unsigned long long)arg2 ;
--(id)initFromLegacyDictionary:(id)arg1 ;
 -(NSArray *)onDemandRules;
 @end
 

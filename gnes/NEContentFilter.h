@@ -15,12 +15,10 @@
     long long _grade;
 }
 
-@property (assign) char enableManualMode;                               //@synthesize enableManualMode=_enableManualMode - In the implementation block
 @property (getter=isEnabled) char enabled;                              //@synthesize enabled=_enabled - In the implementation block
 @property (copy) NEFilterProviderConfiguration * provider;              //@synthesize provider=_provider - In the implementation block
 @property (assign,nonatomic) long long grade;                           //@synthesize grade=_grade - In the implementation block
 -(id)init;
--(void)setEnabled:(char)arg1 ;
 -(char)isEnabled;
 -(NEFilterProviderConfiguration *)provider;
 -(long long)grade;

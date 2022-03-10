@@ -10,6 +10,4 @@
 @protocol NEProfilePayloadHandlerDelegate
 @required
 -(id)getConfigurationIdentifier;
-
 @end
-

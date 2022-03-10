@@ -35,20 +35,12 @@
 -(NSString *)profileOrganization;
 -(NSDate *)profileIngestionDate;
 -(long long)profileSource;
--(id)copyWithZone:(NSZone*)arg1 ;
 -(id)init;
--(void)encodeWithCoder:(id)arg1 ;
--(id)initWithCoder:(id)arg1 ;
 -(NSString *)systemVersion;
 -(NSString *)profileUUID;
 -(NSString *)profileIdentifier;
--(void)setProfileIdentifier:(NSString *)arg1 ;
--(void)setPayloadUUID:(NSString *)arg1 ;
 -(NSString *)payloadUUID;
--(void)setSystemVersion:(NSString *)arg1 ;
--(void)setPayloadProtocolType:(NSString *)arg1 ;
 -(NSString *)payloadProtocolType;
--(void)setPayloadOrganization:(NSString *)arg1 ;
 -(NSString *)payloadOrganization;
 @end
 

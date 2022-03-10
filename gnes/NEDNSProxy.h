@@ -9,23 +9,16 @@
 @class NEDNSProxyProviderProtocol;
 
 @interface NEDNSProxy : NSObject <NSCopying> {
-
 	char _enabled;
 	NEDNSProxyProviderProtocol* _protocol;
-
 }
 
 @property (getter=isEnabled) char enabled;                           //@synthesize enabled=_enabled - In the implementation block
 @property (copy) NEDNSProxyProviderProtocol * protocol;              //@synthesize protocol=_protocol - In the implementation block
--(char)checkValidityAndCollectErrors:(id)arg1 ;
--(id)copyWithZone:(NSZone*)arg1 ;
 -(id)description;
 -(id)init;
--(void)encodeWithCoder:(id)arg1 ;
--(id)initWithCoder:(id)arg1 ;
 -(void)setEnabled:(char)arg1 ;
 -(char)isEnabled;
 -(NEDNSProxyProviderProtocol *)protocol;
--(id)descriptionWithIndent:(int)arg1 options:(unsigned long long)arg2 ;
 @end
 

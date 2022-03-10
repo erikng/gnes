@@ -1,4 +1,4 @@
-# gnes
+# gnes (G Ness)
 Get Network Extension Status
 
 # Use Case

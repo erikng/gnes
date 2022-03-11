@@ -232,6 +232,7 @@ if !appConfig.isEmpty {
     } else {
         print("Did not find network extension!")
     }
+    exit(1)
 }
 
 //if let NetworkExtensionBundle = Bundle(path: "/System/Library/Frameworks/NetworkExtension.framework") {

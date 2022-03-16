@@ -9,6 +9,7 @@ import Foundation
 import NetworkExtension
 // TODO: SystemExtension data https://developer.apple.com/documentation/systemextensions/ossystemextensionmanager/3295261-sharedmanager?language=objc
 import SystemExtensions
+import AppKit
 let sharedSEManager = OSSystemExtensionManager.self.shared
 
 extension Date
@@ -27,6 +28,7 @@ var appConfig = [:] as Dictionary
 var payloadInfo = [:] as Dictionary
 var providerInfo = [:] as Dictionary
 var typeInfo = [:] as Dictionary
+var dumpConfig = [:] as Dictionary
 var foundIdentifiers = [:] as Dictionary
 var foundContentFilterIdentifiers = [String]()
 var foundDnsProxyIdentifiers = [String]()
@@ -34,6 +36,7 @@ var foundUnknownIdentifiers = [String]()
 var foundVPNIdentifiers = [String]()
 var debug = false
 var enabled = false
+var dump = false
 var foundExtension = false
 var rawConfig = NEConfiguration()
 
@@ -55,6 +58,9 @@ OPTIONS
      -debug
              Optional: Returns all found bundle identifiers and type if passed identifier is not found
 
+     -dump
+             Optional: Returns all found bundle identifiers and their data. Can be combined with optional output
+
      -identifier
              Required: The bundle identifier of the network extension to query
 
@@ -74,6 +80,8 @@ if arguments.contains("-identifier") && arguments.contains("-type") {
     identifier = arguments[identifierArg! + 1]
     let typeArg = arguments.firstIndex(where: {$0 == "-type"})
     type = arguments[typeArg! + 1]
+} else if arguments.contains("-dump") {
+    dump = true
 } else {
     print(helpInfo)
     exit(1)
@@ -87,7 +95,7 @@ let sharedManager = NEConfigurationManager.self.shared()
 _ = sharedManager?.reloadFromDisk()
 let loadedConfigurations = sharedManager?.loadedConfigurations
 if loadedConfigurations != nil {
-    for (_, value) in loadedConfigurations! as NSDictionary {
+    for (key, value) in loadedConfigurations! as NSDictionary {
         let config = value as! NEConfiguration
         if debug {
             if config.contentFilter != nil {
@@ -100,13 +108,20 @@ if loadedConfigurations != nil {
                 foundUnknownIdentifiers.append(config.application)
             }
         }
-        if config.application == identifier && !foundExtension {
+        if dump {
+            // reset these keys every time when dumping
+            appConfig = [:]
+            providerInfo = [:]
+            typeInfo = [:]
+            rawConfig = NEConfiguration()
+        }
+        if config.application == identifier && !foundExtension || dump {
             rawConfig = config
-            if (config.contentFilter != nil) && type != "contentFilter" {
+            if (config.contentFilter != nil) && type != "contentFilter" && !dump {
                 continue
-            } else if (config.dnsProxy != nil) && type != "dnsProxy" {
+            } else if (config.dnsProxy != nil) && type != "dnsProxy" && !dump {
                 continue
-            } else if (config.vpn != nil) && type != "vpn" {
+            } else if (config.vpn != nil) && type != "vpn" && !dump {
                 continue
             }
             foundExtension = true
@@ -176,7 +191,6 @@ if loadedConfigurations != nil {
                 providerInfo["providerBundleIdentifier"] = config.vpn.protocol.value(forKeyPath: "providerBundleIdentifier")
                 providerInfo["designatedRequirement"] = config.vpn.protocol.value(forKeyPath: "designatedRequirement")
                 typeInfo["protocol"] = providerInfo
-                
                 typeInfo["enabled"] = (config.vpn.enabled != 0)
                 enabled = (config.vpn.enabled != 0)
                 typeInfo["onDemandEnabled"] = (config.vpn.onDemandEnabled != 0)
@@ -200,26 +214,48 @@ if loadedConfigurations != nil {
                 appConfig["payloadInfo"] = payloadInfo
             }
         }
+        if dump {
+            if CommandLine.arguments.contains("-stdout-raw") {
+                dumpConfig[(key as! UUID).uuidString] = rawConfig
+            } else {
+                dumpConfig[(key as! UUID).uuidString] = appConfig
+            }
+        }
     }
 } else {
     print("Could not load configurations from disk!")
     exit(1)
 }
-if !appConfig.isEmpty {
+if !appConfig.isEmpty || (dump && !dumpConfig.isEmpty) {
     if CommandLine.arguments.contains("-stdout-xml") {
-        let plistData = try PropertyListSerialization.data(fromPropertyList: appConfig, format: .xml, options: 0)
+        var plistData = try PropertyListSerialization.data(fromPropertyList: appConfig, format: .xml, options: 0)
+        if dump {
+            plistData = try PropertyListSerialization.data(fromPropertyList: dumpConfig, format: .xml, options: 0)
+        }
         let xmlPlistData = try XMLDocument.init(data: plistData, options: .nodePreserveAll)
         let prettyXMLData = xmlPlistData.xmlData(options: .nodePrettyPrint)
         let prettyXMLString = String(data: prettyXMLData, encoding: .utf8)
         print(prettyXMLString as AnyObject)
     } else if CommandLine.arguments.contains("-stdout-json") {
-        print(String(data: try! JSONSerialization.data(withJSONObject: appConfig, options: [.prettyPrinted, .sortedKeys]), encoding: .utf8)!)
+        if dump {
+            print(String(data: try! JSONSerialization.data(withJSONObject: dumpConfig, options: [.prettyPrinted, .sortedKeys]), encoding: .utf8)!)
+        } else {
+            print(String(data: try! JSONSerialization.data(withJSONObject: appConfig, options: [.prettyPrinted, .sortedKeys]), encoding: .utf8)!)
+        }
     } else if CommandLine.arguments.contains("-stdout-enabled") {
         print(enabled)
     } else if CommandLine.arguments.contains("-stdout-raw") {
-        print(rawConfig)
+        if dump {
+            print(dumpConfig)
+        } else {
+            print(rawConfig)
+        }
     } else {
-        print(appConfig as AnyObject)
+        if dump {
+            print(dumpConfig as AnyObject)
+        } else {
+            print(appConfig as AnyObject)
+        }
     }
 } else {
     if debug {
@@ -234,17 +270,3 @@ if !appConfig.isEmpty {
     }
     exit(1)
 }
-
-//if let NetworkExtensionBundle = Bundle(path: "/System/Library/Frameworks/NetworkExtension.framework") {
-//    let NEConfigurationManager: AnyClass? = NetworkExtensionBundle.classNamed("NEConfigurationManager")
-//    let sharedManager = NEConfigurationManager?.sharedManager() as AnyObject?
-//    _ = sharedManager?.reloadFromDisk()
-//    let loadedConfigurations = sharedManager?.loadedConfigurations as! NSDictionary
-//    for (key, value) in loadedConfigurations {
-//        let config = value as! NEConfiguration
-//        let application = config.application
-//        if application == identifier {
-//            enabled = (config.contentFilter.enabled != 0)
-//        }
-//    }
-//}

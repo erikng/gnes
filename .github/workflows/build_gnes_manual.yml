@@ -1,0 +1,61 @@
+name: Manual build gnes
+
+on: [workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: macos-11
+
+    steps:
+    - name: Checkout gnes repo
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+
+    - name: Run build package script
+      run: ./build_gnes.zsh "CREATE_PKG"
+
+    - name: get environment variables
+      id: get_env_var
+      run: |
+         echo "GNES_VERSION=$(/bin/cat ./build_info.txt)" >> $GITHUB_ENV
+
+    - name: Generate changelog
+      id: changelog
+      uses: metcalfc/changelog-generator@e5306b306fa2e34f05258789e0e5c526c1bd4352 # v1.0.0
+      with:
+        myToken: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: v${{env.GNES_VERSION}}
+        release_name: gnes ${{env.GNES_VERSION}}
+        body: |
+            # Notes
+            This is a version of gnes created by GitHub Actions.
+            This binary is currently not signed or notarized and installs to `/usr/local/bin/gnes`
+
+            # Changes
+            ${{ steps.changelog.outputs.changelog }}
+        draft: false
+        prerelease: false
+
+    - name: Upload Package Release Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./outputs/gnes-${{env.GNES_VERSION}}.pkg
+        asset_name: gnes-${{env.GNES_VERSION}}.pkg
+        asset_content_type: application/x-newton-compatible-pkg
+
+    - name: Upload packages
+      uses: actions/upload-artifact@v1
+      with:
+        name: packages
+        path: outputs/

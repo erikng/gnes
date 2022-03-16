@@ -33,7 +33,7 @@ fi
 
 # build gnes
 echo "Building gnes"
-$XCODE_BUILD -project "$TOOLSDIR/gnes.xcodeproj" -scheme "gnes-release" -destination 'platform=macos'
+$XCODE_BUILD -project "$TOOLSDIR/gnes.xcodeproj" -scheme "gnes-release" -destination 'platform=macos' -archivePath "${BUILDSDIR}/Release/gnes"
 XCB_RESULT="$?"
 if [ "${XCB_RESULT}" != "0" ]; then
     echo "Error running xcodebuild: ${XCB_RESULT}" 1>&2

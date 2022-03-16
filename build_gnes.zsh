@@ -4,6 +4,7 @@
 
 # Variables
 XCODE_PATH="/Applications/Xcode_13.2.1.app"
+# XCODE_PATH="/Applications/Xcode.app"
 MP_SHA="71c57fcfdf43692adcd41fa7305be08f66bae3e5"
 MP_BINDIR="/tmp/munki-pkg"
 CONSOLEUSER=$(/usr/bin/stat -f "%Su" /dev/console)
@@ -89,6 +90,7 @@ fi
 JSONFILE
 
 # Create the pkg
+pip install pyyaml
 "${MP_BINDIR}/munki-pkg-${MP_SHA}/munkipkg" "$GNES_PKG_PATH"
 PKG_RESULT="$?"
 if [ "${PKG_RESULT}" != "0" ]; then

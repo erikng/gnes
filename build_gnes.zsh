@@ -13,6 +13,8 @@ OUTPUTSDIR="$TOOLSDIR/outputs"
 MP_ZIP="/tmp/munki-pkg.zip"
 XCODE_BUILD_PATH="$XCODE_PATH/Contents/Developer/usr/bin/xcodebuild"
 SUBBUILD=$((80620 + $(git rev-parse HEAD~0 | xargs -I{} git rev-list --count {})))
+DERIVED_DATA_DIR="${BUILDSDIR}/Release"
+
 
 # automate the build version bump
 AUTOMATED_GNES_BUILD="0.0.1.$SUBBUILD"
@@ -33,7 +35,7 @@ fi
 
 # build gnes
 echo "Building gnes"
-$XCODE_BUILD -project "$TOOLSDIR/gnes.xcodeproj" -scheme "gnes-release" -destination 'platform=macos' -archivePath "${BUILDSDIR}/Release/gnes"
+$XCODE_BUILD -project "$TOOLSDIR/gnes.xcodeproj" -scheme "gnes-release" -destination 'platform=macos' -derivedDataPath "$DERIVED_DATA_DIR"
 XCB_RESULT="$?"
 if [ "${XCB_RESULT}" != "0" ]; then
     echo "Error running xcodebuild: ${XCB_RESULT}" 1>&2
@@ -54,7 +56,7 @@ if [ -e $GNES_PKG_PATH ]; then
 fi
 /bin/mkdir -p "$GNES_PKG_PATH/payload/usr/local/bin"
 /usr/bin/sudo /usr/sbin/chown -R ${CONSOLEUSER}:wheel "$GNES_PKG_PATH"
-/bin/mv "${BUILDSDIR}/Release/gnes" "$GNES_PKG_PATH/payload/usr/local/bin/gnes"
+/bin/mv "$DERIVED_DATA_DIR/Build/Products/Release/gnes" "$GNES_PKG_PATH/payload/usr/local/bin/gnes"
 
 # Download specific version of munki-pkg
 echo "Downloading munki-pkg tool from github..."

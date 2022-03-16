@@ -11,10 +11,11 @@ TOOLSDIR=$(dirname $0)
 BUILDSDIR="$TOOLSDIR/build"
 OUTPUTSDIR="$TOOLSDIR/outputs"
 MP_ZIP="/tmp/munki-pkg.zip"
-NEWSUBBUILD=$((80620 + $(git rev-parse HEAD~0 | xargs -I{} git rev-list --count {})))
+XCODE_BUILD_PATH="$XCODE_PATH/Contents/Developer/usr/bin/xcodebuild"
+SUBBUILD=$((80620 + $(git rev-parse HEAD~0 | xargs -I{} git rev-list --count {})))
 
 # automate the build version bump
-AUTOMATED_GNES_BUILD="0.0.1.$NEWSUBBUILD"
+AUTOMATED_GNES_BUILD="0.0.1.$SUBBUILD"
 
 # Create files to use for build process info
 echo "$AUTOMATED_GNES_BUILD" > $TOOLSDIR/build_info.txt

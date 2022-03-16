@@ -94,7 +94,8 @@ pip3 install pyyaml
 python3 "${MP_BINDIR}/munki-pkg-${MP_SHA}/munkipkg" "$GNES_PKG_PATH"
 PKG_RESULT="$?"
 if [ "${PKG_RESULT}" != "0" ]; then
-  echo "Could not sign package: ${PKG_RESULT}" 1>&2
+  echo "Could not create package: ${PKG_RESULT}" 1>&2
+  exit 1
 else
   # Move the pkg
   /bin/mv "$GNES_PKG_PATH/build/gnes-$AUTOMATED_GNES_BUILD.pkg" "$OUTPUTSDIR"

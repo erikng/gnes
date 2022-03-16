@@ -85,7 +85,7 @@ fi
   "distribution_style": true,
   "version": "$AUTOMATED_GNES_BUILD",
   "name": "gnes-$AUTOMATED_GNES_BUILD.pkg",
-  "install_location": "/",
+  "install_location": "/"
 }
 JSONFILE
 

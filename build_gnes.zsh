@@ -90,8 +90,8 @@ fi
 JSONFILE
 
 # Create the pkg
-pip install pyyaml
-"${MP_BINDIR}/munki-pkg-${MP_SHA}/munkipkg" "$GNES_PKG_PATH"
+pip3 install pyyaml
+python3 "${MP_BINDIR}/munki-pkg-${MP_SHA}/munkipkg" "$GNES_PKG_PATH"
 PKG_RESULT="$?"
 if [ "${PKG_RESULT}" != "0" ]; then
   echo "Could not sign package: ${PKG_RESULT}" 1>&2

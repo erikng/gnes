@@ -153,9 +153,9 @@ if loadedConfigurations != nil {
                 providerInfo["identityDataImported"] = (config.dnsProxy.protocol.value(forKeyPath: "identityDataImported") as! Bool)
                 providerInfo["disconnectOnSleep"] = config.dnsProxy.protocol.disconnectOnSleep
                 providerInfo["disconnectOnIdle"] = (config.dnsProxy.protocol.value(forKeyPath: "disconnectOnIdle") as! Bool)
-                providerInfo["disconnectOnIdleTimeout"] = (config.dnsProxy.protocol.value(forKeyPath: "disconnectOnIdleTimeout") as! Bool)
+                providerInfo["disconnectOnIdleTimeout"] = (config.dnsProxy.protocol.value(forKeyPath: "disconnectOnIdleTimeout") as! Int)
                 providerInfo["disconnectOnWake"] = (config.dnsProxy.protocol.value(forKeyPath: "disconnectOnWake") as! Bool)
-                providerInfo["disconnectOnWakeTimeout"] = (config.dnsProxy.protocol.value(forKeyPath: "disconnectOnWakeTimeout") as! Bool)
+                providerInfo["disconnectOnWakeTimeout"] = (config.dnsProxy.protocol.value(forKeyPath: "disconnectOnWakeTimeout") as! Int)
                 providerInfo["disconnectOnUserSwitch"] = (config.dnsProxy.protocol.value(forKeyPath: "disconnectOnUserSwitch") as! Bool)
                 providerInfo["disconnectOnLogout"] = (config.dnsProxy.protocol.value(forKeyPath: "disconnectOnLogout") as! Bool)
                 providerInfo["includeAllNetworks"] = config.dnsProxy.protocol.includeAllNetworks
@@ -177,9 +177,9 @@ if loadedConfigurations != nil {
                 providerInfo["identityDataImported"] = (config.vpn.protocol.value(forKeyPath: "identityDataImported") as! Bool)
                 providerInfo["disconnectOnSleep"] = config.vpn.protocol.disconnectOnSleep
                 providerInfo["disconnectOnIdle"] = (config.vpn.protocol.value(forKeyPath: "disconnectOnIdle") as! Bool)
-                providerInfo["disconnectOnIdleTimeout"] = (config.vpn.protocol.value(forKeyPath: "disconnectOnIdleTimeout") as! Bool)
+                providerInfo["disconnectOnIdleTimeout"] = (config.vpn.protocol.value(forKeyPath: "disconnectOnIdleTimeout") as! Int)
                 providerInfo["disconnectOnWake"] = (config.vpn.protocol.value(forKeyPath: "disconnectOnWake") as! Bool)
-                providerInfo["disconnectOnWakeTimeout"] = (config.vpn.protocol.value(forKeyPath: "disconnectOnWakeTimeout") as! Bool)
+                providerInfo["disconnectOnWakeTimeout"] = (config.vpn.protocol.value(forKeyPath: "disconnectOnWakeTimeout") as! Int)
                 providerInfo["disconnectOnUserSwitch"] = (config.vpn.protocol.value(forKeyPath: "disconnectOnUserSwitch") as! Bool)
                 providerInfo["disconnectOnLogout"] = (config.vpn.protocol.value(forKeyPath: "disconnectOnLogout") as! Bool)
                 providerInfo["includeAllNetworks"] = config.vpn.protocol.includeAllNetworks
@@ -269,4 +269,11 @@ if !appConfig.isEmpty || (dump && !dumpConfig.isEmpty) {
         print("Did not find network extension!")
     }
     exit(1)
+}
+
+extension NSObject {
+    @objc
+    func value(forUndefinedKey key: String) -> String? {
+        nil
+    }
 }

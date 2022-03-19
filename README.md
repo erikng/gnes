@@ -23,7 +23,7 @@ OPTIONS
      The options are as follows:
 
      -debug
-             Optional: Returns all found bundle identifiers and type if passed identifier is not found
+             Optional: Returns all found bundle identifiers and types. Can be combined with optional output
 
      -dump
              Optional: Returns all found bundle identifiers and their data. Can be combined with optional output
@@ -37,7 +37,7 @@ OPTIONS
 
      output
             Optional: Specific output formats:
-                -stdout-xml -stdout-json -stdout-enabled -stdout-raw
+                -stdout-enabled -stdout-json -stdout-raw -stdout-xml
 ```
 
 # Examples
@@ -153,10 +153,10 @@ gnes -identifier "com.crowdstrike.falcon.App" -type contentFilter -stdout-enable
 true
 ```
 
-## Did not find extension with -debug
+## sample output (dump identifiers with json)
+You can also pass `-stdout-xml`, `-stdout-raw` or none
 ```shell
-gnes -identifier "com.example.fake.contentFilter" -type contentFilter -debug
-Did not find network extension!
+gnes -dump -identifiers -stdout-json
 ```
 
 ```json
@@ -177,14 +177,15 @@ Did not find network extension!
 }
 ```
 
-## Dump everything via json
+## sample output (dump with json)
+You can also pass `-stdout-xml`, `-stdout-raw` or none
 ```shell
 gnes -dump -stdout-json
 ```
 
 ```json
 {
-  "8A618C8C-B151-4905-9796-B9B07144E649" : {
+  "1DD0808A-EB5C-490B-B5FF-65E246B0C3CC" : {
     "application" : "com.crowdstrike.falcon.App",
     "applicationName" : "Falcon",
     "contentFilter" : {
@@ -202,7 +203,7 @@ gnes -dump -stdout-json
       }
     },
     "grade" : 1,
-    "identifier" : "8A618C8C-B151-4905-9796-B9B07144E649",
+    "identifier" : "1DD0808A-EB5C-490B-B5FF-65E246B0C3CC",
     "name" : "Falcon",
     "payloadInfo" : {
       "isSetAside" : false,
@@ -216,4 +217,133 @@ gnes -dump -stdout-json
     }
   }
 }
+```
+
+## sample output (dump raw data with -stdout-raw)
+You can also pass without -stdout-raw
+```shell
+gnes -dump -raw -stdout-raw
+```
+
+```swift
+["1DD0808A-EB5C-490B-B5FF-65E246B0C3CC": {
+    name = Falcon
+    identifier = 1DD0808A-EB5C-490B-B5FF-65E246B0C3CC
+    applicationName = Falcon
+    application = com.crowdstrike.falcon.App
+    grade = 1
+    contentFilter = {
+        enabled = YES
+        provider = {
+            pluginType = com.crowdstrike.falcon.App
+            dataProviderDesignatedRequirement = identifier "com.crowdstrike.falcon.Agent" and anchor apple generic and certificate 1[field.1.2.840.113635.100.6.2.6] /* exists */ and certificate leaf[field.1.2.840.113635.100.6.1.13] /* exists */ and certificate leaf[subject.OU] = X9E956P446
+            dataProviderBundleIdentifier = com.crowdstrike.falcon.Agent
+            packetProviderBundleIdentifier = com.crowdstrike.falcon.Agent
+            organization = CrowdStrike
+            filterPackets = NO
+            filterSockets = YES
+            preserveExistingConnections = NO
+        }
+        filter-grade = 1
+    }
+    payloadInfo = {
+        payloadUUID = 9E2ED1D9-EEFE-42CD-936D-A495B6351C8D
+        payloadOrganization = GitHub
+        profileUUID = AFC41A7E-CBC2-4A3F-A778-90D075767560
+        profileIdentifier = C20ACDFB-440C-491F-A93A-2A9492F776BA
+        isSetAside = NO
+        profileIngestionDate = 2022-03-08 00:00:00 +0000
+        systemVersion = Version 12.2.1 (Build 21D62)
+        profileSource = mdm
+    }
+}, "51E6E1B4-FF69-44E3-8803-DFB9DE62FD50": {
+    name = Cisco AnyConnect Socket Filter
+    identifier = 51E6E1B4-FF69-44E3-8803-DFB9DE62FD50
+    applicationName = Cisco AnyConnect Socket Filter
+    application = com.cisco.anyconnect.macos.acsock
+    grade = 1
+    dnsProxy = {
+        enabled = YES
+        protocol = {
+            type = dnsProxy
+            identifier = EF72DA8C-912F-421F-887A-2C447E8F2AB5
+            identityDataImported = NO
+            disconnectOnSleep = NO
+            disconnectOnIdle = NO
+            disconnectOnIdleTimeout = 0
+            disconnectOnWake = NO
+            disconnectOnWakeTimeout = 0
+            disconnectOnUserSwitch = NO
+            disconnectOnLogout = NO
+            includeAllNetworks = NO
+            excludeLocalNetworks = NO
+            enforceRoutes = NO
+            pluginType = com.cisco.anyconnect.macos.acsock
+            providerBundleIdentifier = com.cisco.anyconnect.macos.acsockext
+            designatedRequirement = anchor apple generic and identifier "com.cisco.anyconnect.macos.acsockext" and (certificate leaf[field.1.2.840.113635.100.6.1.9] /* exists */ or certificate 1[field.1.2.840.113635.100.6.2.6] /* exists */ and certificate leaf[field.1.2.840.113635.100.6.1.13] /* exists */ and certificate leaf[subject.OU] = DE8Y96K9QP)
+        }
+    }
+}, "42772299-C226-4F45-A90C-E16B220CD24D": {
+    name = Cisco AnyConnect Content Filter
+    identifier = 42772299-C226-4F45-A90C-E16B220CD24D
+    applicationName = Cisco AnyConnect Socket Filter
+    application = com.cisco.anyconnect.macos.acsock
+    grade = 1
+    contentFilter = {
+        enabled = YES
+        provider = {
+            pluginType = com.cisco.anyconnect.macos.acsock
+            dataProviderDesignatedRequirement = anchor apple generic and identifier "com.cisco.anyconnect.macos.acsockext" and (certificate leaf[field.1.2.840.113635.100.6.1.9] /* exists */ or certificate 1[field.1.2.840.113635.100.6.2.6] /* exists */ and certificate leaf[field.1.2.840.113635.100.6.1.13] /* exists */ and certificate leaf[subject.OU] = DE8Y96K9QP)
+            dataProviderBundleIdentifier = com.cisco.anyconnect.macos.acsockext
+            filterPackets = NO
+            filterSockets = YES
+            preserveExistingConnections = NO
+        }
+        filter-grade = 1
+    }
+    payloadInfo = {
+        payloadUUID = 2EB09447-29D0-49E0-8D4A-D83D653F1938
+        payloadOrganization = GitHub
+        profileUUID = 23811CFC-CEFE-4E24-B060-48BB1350B670
+        profileIdentifier = DD83CAC6-3069-4EA2-8F24-F04F4220ABA2
+        isSetAside = NO
+        profileIngestionDate = 2022-03-08 00:00:00 +0000
+        systemVersion = Version 12.2.1 (Build 21D62)
+        profileSource = mdm
+    }
+}, "49495CDF-F590-4AAA-BA1D-3EE71C1E6C9C": {
+    name = Cisco AnyConnect Socket Filter
+    identifier = 49495CDF-F590-4AAA-BA1D-3EE71C1E6C9C
+    applicationName = Cisco AnyConnect Socket Filter
+    application = com.cisco.anyconnect.macos.acsock
+    grade = 1
+    VPN = {
+        enabled = YES
+        onDemandEnabled = NO
+        disconnectOnDemandEnabled = NO
+        onDemandUserOverrideDisabled = NO
+        protocol = {
+            type = plugin
+            identifier = 95FF85F6-28D9-47B9-A7E8-8809622C78C0
+            serverAddress = Connection managed by Cisco AnyConnect Socket Filter
+            identityDataImported = NO
+            disconnectOnSleep = NO
+            disconnectOnIdle = NO
+            disconnectOnIdleTimeout = 0
+            disconnectOnWake = NO
+            disconnectOnWakeTimeout = 0
+            disconnectOnUserSwitch = NO
+            disconnectOnLogout = NO
+            includeAllNetworks = NO
+            excludeLocalNetworks = NO
+            enforceRoutes = NO
+            pluginType = com.cisco.anyconnect.macos.acsock
+            authenticationMethod = 0
+            reassertTimeout = 0
+            providerBundleIdentifier = com.cisco.anyconnect.macos.acsockext
+            designatedRequirement = anchor apple generic and identifier "com.cisco.anyconnect.macos.acsockext" and (certificate leaf[field.1.2.840.113635.100.6.1.9] /* exists */ or certificate 1[field.1.2.840.113635.100.6.2.6] /* exists */ and certificate leaf[field.1.2.840.113635.100.6.1.13] /* exists */ and certificate leaf[subject.OU] = DE8Y96K9QP)
+        }
+        tunnelType = app-proxy
+    }
+}]
 ```

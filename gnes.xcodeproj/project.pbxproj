@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6300ED8327E637050039A961 /* NetworkExtensionLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6300ED8227E637050039A961 /* NetworkExtensionLogic.swift */; };
+		6300ED8527E637380039A961 /* SystemExtensionLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6300ED8427E637380039A961 /* SystemExtensionLogic.swift */; };
+		6300ED8927E64AD20039A961 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6300ED8827E64AD20039A961 /* Helpers.swift */; };
 		63F9160B27D29F4100366E84 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F9160A27D29F4100366E84 /* main.swift */; };
 /* End PBXBuildFile section */
 
@@ -23,6 +26,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		6300ED8227E637050039A961 /* NetworkExtensionLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkExtensionLogic.swift; sourceTree = "<group>"; };
+		6300ED8427E637380039A961 /* SystemExtensionLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemExtensionLogic.swift; sourceTree = "<group>"; };
+		6300ED8827E64AD20039A961 /* Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
 		638E357E27D52DE40003AC1F /* NEVPN.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NEVPN.h; sourceTree = "<group>"; };
 		638E357F27D52EDA0003AC1F /* NEDNSProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NEDNSProxy.h; sourceTree = "<group>"; };
 		63F9160727D29F4100366E84 /* gnes */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = gnes; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -67,6 +73,9 @@
 			isa = PBXGroup;
 			children = (
 				63F9160A27D29F4100366E84 /* main.swift */,
+				6300ED8827E64AD20039A961 /* Helpers.swift */,
+				6300ED8227E637050039A961 /* NetworkExtensionLogic.swift */,
+				6300ED8427E637380039A961 /* SystemExtensionLogic.swift */,
 				63F9162A27D3061500366E84 /* gnes-Bridging-Header.h */,
 				63F9162827D3050C00366E84 /* NEConfigurationManager.h */,
 				63F9162D27D315AE00366E84 /* NEConfiguration.h */,
@@ -139,7 +148,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6300ED8927E64AD20039A961 /* Helpers.swift in Sources */,
 				63F9160B27D29F4100366E84 /* main.swift in Sources */,
+				6300ED8527E637380039A961 /* SystemExtensionLogic.swift in Sources */,
+				6300ED8327E637050039A961 /* NetworkExtensionLogic.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

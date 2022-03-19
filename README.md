@@ -14,7 +14,7 @@ NAME
      gnes – Get Network Extension Status
 
 SYNOPSIS
-     gnes -debug [-identifier identifier] [-type type] output
+     gnes -dump [-all -identifiers -raw] [-identifier %identifier%] [-type %type%] %output%
 
 DESCRIPTION
      The gnes command is used to read and print network extension status
@@ -22,22 +22,26 @@ DESCRIPTION
 OPTIONS
      The options are as follows:
 
-     -debug
-             Optional: Returns all found bundle identifiers and types. Can be combined with optional output
-
      -dump
-             Optional: Returns all found bundle identifiers and their data. Can be combined with optional output
+             Optional: Returns requested data. Must be combined with sub-option. Can be combined with some optional outputs
+                -all: Returns all found bundle identifier and their data. Can be combined with -stdout-json, -stdout-raw, -stdout-xml and None
+                -identifiers: Returns all found bundle identifier. Can be combined with -stdout-json, -stdout-raw, -stdout-xml and None
+                -raw: Returns all found data directly from NEConfiguration. Can be combined with -stdout-raw and None
 
      -identifier
              Required: The bundle identifier of the network extension to query
 
      -type
-             Required: The type of network extension you are querying. Needed when an application installs multiple network extensions with the same bundle identifier
-                "contentFilter", "dnsProxy", "vpn"
+             Required: The type of the network extension to query. Needed due to multiple network extensions utilizing the same bundle identifier
+                Allowed values: "contentFilter", "dnsProxy", "vpn"
 
      output
             Optional: Specific output formats:
-                -stdout-enabled -stdout-json -stdout-raw -stdout-xml
+                -stdout-enabled: Returns Network Extensions enabled status
+                -stdout-json: Returns Network Extension(s) data in JSON format
+                -stdout-raw: Returns Network Extension(s) data in raw Swift format
+                -stdout-xml: Returns Network Extension(s) data in PLIST format
+                None passed: Returns standard Network Extension(s) data in Swift printed format
 ```
 
 # Examples

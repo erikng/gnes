@@ -50,13 +50,17 @@ func getAllNetworkExtensions() -> [String:Any] {
                 foundContentFilterIdentifiers.append(config.application)
                 appConfig["type"] = "contentFilter"
                 providerInfo["pluginType"] = config.contentFilter.provider.value(forKeyPath: "pluginType")
-                providerInfo["dataProviderDesignatedRequirement"] = config.contentFilter.provider.value(forKeyPath: "dataProviderDesignatedRequirement")
+                if let dataProviderDesignatedRequirement = config.contentFilter.provider.value(forKeyPath: "dataProviderDesignatedRequirement") {
+                    providerInfo["dataProviderDesignatedRequirement"] = dataProviderDesignatedRequirement
+                }
                 providerInfo["dataProviderBundleIdentifier"] = config.contentFilter.provider.filterDataProviderBundleIdentifier
                 providerInfo["packetProviderBundleIdentifier"] = config.contentFilter.provider.filterPacketProviderBundleIdentifier
                 providerInfo["organization"] = config.contentFilter.provider.organization
                 providerInfo["filterPackets"] = config.contentFilter.provider.filterPackets
                 providerInfo["filterSockets"] = config.contentFilter.provider.filterSockets
-                providerInfo["preserveExistingConnections"] = (config.contentFilter.provider.value(forKeyPath: "preserveExistingConnections") as! Int != 0)
+                if let preserveExistingConnections = config.contentFilter.provider.value(forKeyPath: "preserveExistingConnections") {
+                    providerInfo["preserveExistingConnections"] = (preserveExistingConnections as! Int != 0)
+                }
                 typeInfo["provider"] = providerInfo
                 typeInfo["enabled"] = (config.contentFilter.enabled != 0)
                 typeInfo["filterGrade"] = config.contentFilter.grade
@@ -66,22 +70,44 @@ func getAllNetworkExtensions() -> [String:Any] {
                 foundDnsProxyIdentifiers.append(config.application)
                 appConfig["type"] = "dnsProxy"
                 // dnsProxy = type 6
-                providerInfo["type"] = config.dnsProxy.protocol.value(forKeyPath: "type")
-                providerInfo["identifier"] = (config.dnsProxy.protocol.value(forKeyPath: "identifier") as! UUID).uuidString
-                providerInfo["identityDataImported"] = (config.dnsProxy.protocol.value(forKeyPath: "identityDataImported") as! Bool)
+                if let type = config.dnsProxy.protocol.value(forKeyPath: "type") {
+                    providerInfo["type"] = type
+                }
+                if let identifier = config.dnsProxy.protocol.value(forKeyPath: "identifier") {
+                    providerInfo["identifier"] = (identifier as! UUID).uuidString
+                }
+                if let identityDataImported = config.dnsProxy.protocol.value(forKeyPath: "identityDataImported") {
+                    providerInfo["identityDataImported"] = (identityDataImported as! Bool)
+                }
                 providerInfo["disconnectOnSleep"] = config.dnsProxy.protocol.disconnectOnSleep
-                providerInfo["disconnectOnIdle"] = (config.dnsProxy.protocol.value(forKeyPath: "disconnectOnIdle") as! Bool)
-                providerInfo["disconnectOnIdleTimeout"] = (config.dnsProxy.protocol.value(forKeyPath: "disconnectOnIdleTimeout") as! Int)
-                providerInfo["disconnectOnWake"] = (config.dnsProxy.protocol.value(forKeyPath: "disconnectOnWake") as! Bool)
-                providerInfo["disconnectOnWakeTimeout"] = (config.dnsProxy.protocol.value(forKeyPath: "disconnectOnWakeTimeout") as! Int)
-                providerInfo["disconnectOnUserSwitch"] = (config.dnsProxy.protocol.value(forKeyPath: "disconnectOnUserSwitch") as! Bool)
-                providerInfo["disconnectOnLogout"] = (config.dnsProxy.protocol.value(forKeyPath: "disconnectOnLogout") as! Bool)
+                if let disconnectOnIdle = config.dnsProxy.protocol.value(forKeyPath: "disconnectOnIdle") {
+                    providerInfo["disconnectOnIdle"] = (disconnectOnIdle as! Bool)
+                }
+                if let disconnectOnIdleTimeout = config.dnsProxy.protocol.value(forKeyPath: "disconnectOnIdleTimeout") {
+                    providerInfo["disconnectOnIdleTimeout"] = (disconnectOnIdleTimeout as! Int)
+                }
+                if let disconnectOnWake = config.dnsProxy.protocol.value(forKeyPath: "disconnectOnWake") {
+                    providerInfo["disconnectOnWake"] = (disconnectOnWake as! Bool)
+                }
+                if let disconnectOnWakeTimeout = config.dnsProxy.protocol.value(forKeyPath: "disconnectOnWakeTimeout") {
+                    providerInfo["disconnectOnWakeTimeout"] = (disconnectOnWakeTimeout as! Int)
+                }
+                if let disconnectOnUserSwitch = config.dnsProxy.protocol.value(forKeyPath: "disconnectOnUserSwitch") {
+                    providerInfo["disconnectOnUserSwitch"] = (disconnectOnUserSwitch as! Bool)
+                }
+                if let disconnectOnLogout = config.dnsProxy.protocol.value(forKeyPath: "disconnectOnLogout") {
+                    providerInfo["disconnectOnLogout"] = (disconnectOnLogout as! Bool)
+                }
                 providerInfo["includeAllNetworks"] = config.dnsProxy.protocol.includeAllNetworks
                 providerInfo["excludeLocalNetworks"] = config.dnsProxy.protocol.excludeLocalNetworks
                 providerInfo["enforceRoutes"] = config.dnsProxy.protocol.enforceRoutes
-                providerInfo["pluginType"] = config.dnsProxy.protocol.value(forKeyPath: "pluginType")
+                if let pluginType = config.dnsProxy.protocol.value(forKeyPath: "pluginType") {
+                    providerInfo["pluginType"] = pluginType
+                }
                 providerInfo["designatedRequirement"] = config.dnsProxy.protocol.providerBundleIdentifier
-                providerInfo["designatedRequirement"] = config.dnsProxy.protocol.value(forKeyPath: "designatedRequirement")
+                if let designatedRequirement = config.dnsProxy.protocol.value(forKeyPath: "designatedRequirement") {
+                    providerInfo["designatedRequirement"] = designatedRequirement
+                }
                 typeInfo["protocol"] = providerInfo
                 typeInfo["enabled"] = (config.dnsProxy.enabled != 0)
                 appConfig["enabled"] = (config.dnsProxy.enabled != 0)
@@ -90,25 +116,53 @@ func getAllNetworkExtensions() -> [String:Any] {
                 foundVPNIdentifiers.append(config.application)
                 appConfig["type"] = "vpn"
                 // app-proxy = type 4
-                providerInfo["type"] = config.vpn.protocol.value(forKeyPath: "type")
-                providerInfo["identifier"] = (config.vpn.protocol.value(forKeyPath: "identifier") as! UUID).uuidString
+                if let type = config.vpn.protocol.value(forKeyPath: "type") {
+                    providerInfo["type"] = type
+                }
+                if let identifier = config.vpn.protocol.value(forKeyPath: "identifier") {
+                    providerInfo["identifier"] = (identifier as! UUID).uuidString
+                }
                 providerInfo["serverAddress"] = config.vpn.protocol.serverAddress
-                providerInfo["identityDataImported"] = (config.vpn.protocol.value(forKeyPath: "identityDataImported") as! Bool)
+                if let identityDataImported = config.vpn.protocol.value(forKeyPath: "identityDataImported") {
+                    providerInfo["identityDataImported"] = (identityDataImported as! Bool)
+                }
                 providerInfo["disconnectOnSleep"] = config.vpn.protocol.disconnectOnSleep
-                providerInfo["disconnectOnIdle"] = (config.vpn.protocol.value(forKeyPath: "disconnectOnIdle") as! Bool)
-                providerInfo["disconnectOnIdleTimeout"] = (config.vpn.protocol.value(forKeyPath: "disconnectOnIdleTimeout") as! Int)
-                providerInfo["disconnectOnWake"] = (config.vpn.protocol.value(forKeyPath: "disconnectOnWake") as! Bool)
-                providerInfo["disconnectOnWakeTimeout"] = (config.vpn.protocol.value(forKeyPath: "disconnectOnWakeTimeout") as! Int)
-                providerInfo["disconnectOnUserSwitch"] = (config.vpn.protocol.value(forKeyPath: "disconnectOnUserSwitch") as! Bool)
-                providerInfo["disconnectOnLogout"] = (config.vpn.protocol.value(forKeyPath: "disconnectOnLogout") as! Bool)
+                if let disconnectOnIdle = config.vpn.protocol.value(forKeyPath: "disconnectOnIdle") {
+                    providerInfo["disconnectOnIdle"] = (disconnectOnIdle as! Bool)
+                }
+                if let disconnectOnIdleTimeout = config.vpn.protocol.value(forKeyPath: "disconnectOnIdleTimeout") {
+                    providerInfo["disconnectOnIdleTimeout"] = (disconnectOnIdleTimeout as! Int)
+                }
+                if let disconnectOnWake = config.vpn.protocol.value(forKeyPath: "disconnectOnWake") {
+                    providerInfo["disconnectOnWake"] = (disconnectOnWake as! Bool)
+                }
+                if let disconnectOnWakeTimeout = config.vpn.protocol.value(forKeyPath: "disconnectOnWakeTimeout") {
+                    providerInfo["disconnectOnWakeTimeout"] = (disconnectOnWakeTimeout as! Int)
+                }
+                if let disconnectOnUserSwitch = config.vpn.protocol.value(forKeyPath: "disconnectOnUserSwitch") {
+                    providerInfo["disconnectOnUserSwitch"] = (disconnectOnUserSwitch as! Bool)
+                }
+                if let disconnectOnLogout = config.vpn.protocol.value(forKeyPath: "disconnectOnLogout") {
+                    providerInfo["disconnectOnLogout"] = (disconnectOnLogout as! Bool)
+                }
                 providerInfo["includeAllNetworks"] = config.vpn.protocol.includeAllNetworks
                 providerInfo["excludeLocalNetworks"] = config.vpn.protocol.excludeLocalNetworks
                 providerInfo["enforceRoutes"] = config.vpn.protocol.enforceRoutes
-                providerInfo["pluginType"] = config.vpn.protocol.value(forKeyPath: "pluginType")
-                providerInfo["authenticationMethod"] = config.vpn.protocol.value(forKeyPath: "authenticationMethod")
-                providerInfo["reassertTimeout"] = config.vpn.protocol.value(forKeyPath: "reassertTimeout")
-                providerInfo["providerBundleIdentifier"] = config.vpn.protocol.value(forKeyPath: "providerBundleIdentifier")
-                providerInfo["designatedRequirement"] = config.vpn.protocol.value(forKeyPath: "designatedRequirement")
+                if let pluginType = config.vpn.protocol.value(forKeyPath: "pluginType") {
+                    providerInfo["pluginType"] = pluginType
+                }
+                if let authenticationMethod = config.vpn.protocol.value(forKeyPath: "authenticationMethod") {
+                    providerInfo["authenticationMethod"] = authenticationMethod
+                }
+                if let reassertTimeout = config.vpn.protocol.value(forKeyPath: "reassertTimeout") {
+                    providerInfo["reassertTimeout"] = reassertTimeout
+                }
+                if let providerBundleIdentifier = config.vpn.protocol.value(forKeyPath: "providerBundleIdentifier") {
+                    providerInfo["providerBundleIdentifier"] = providerBundleIdentifier
+                }
+                if let designatedRequirement = config.vpn.protocol.value(forKeyPath: "designatedRequirement") {
+                    providerInfo["designatedRequirement"] = designatedRequirement
+                }
                 typeInfo["protocol"] = providerInfo
                 typeInfo["enabled"] = (config.vpn.enabled != 0)
                 typeInfo["onDemandEnabled"] = (config.vpn.onDemandEnabled != 0)
@@ -119,7 +173,6 @@ func getAllNetworkExtensions() -> [String:Any] {
             } else { // Unknown Extensions
                 foundUnknownIdentifiers.append(config.application)
             }
-            
             if dumpRaw {
                 dumpConfig[(key as! UUID).uuidString] = value
             } else {

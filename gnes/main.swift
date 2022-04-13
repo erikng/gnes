@@ -100,13 +100,15 @@ if arguments.contains("-dump") {
 
 for (_, value) in NetworkExtensionData {
     let castedValue = value as! Dictionary<String, Any>
-    if castedValue["application"] as! String == identifier && castedValue["type"] as! String == type {
-        if CommandLine.arguments.contains("-stdout-enabled") {
-            print(castedValue["enabled"]!)
+    if castedValue["application"] != nil {
+        if castedValue["application"] as! String == identifier && castedValue["type"] as! String == type {
+            if CommandLine.arguments.contains("-stdout-enabled") {
+                print(castedValue["enabled"]!)
+                exit(0)
+            }
+            printConfig(configData: castedValue)
             exit(0)
         }
-        printConfig(configData: castedValue)
-        exit(0)
     }
 }
 

@@ -20,9 +20,10 @@ func getAllNetworkExtensions() -> [String:Any] {
             typeInfo = [:]
             var rawConfig = NEConfiguration()
             let config = value as! NEConfiguration
+            let application = config.application
             
             // Base values for all Network Extensions
-            appConfig["application"] = config.application
+            appConfig["application"] = application
             appConfig["applicationName"] = config.applicationName
             appConfig["grade"] = config.grade
             appConfig["identifier"] = config.identifier.uuidString
@@ -47,7 +48,9 @@ func getAllNetworkExtensions() -> [String:Any] {
             
             // Values for specific Network Extensions
             if (config.contentFilter != nil) { // contentFilter Extensions
-                foundContentFilterIdentifiers.append(config.application)
+                if application != nil {
+                    foundContentFilterIdentifiers.append(application!)
+                }
                 appConfig["type"] = "contentFilter"
                 providerInfo["pluginType"] = config.contentFilter.provider.value(forKeyPath: "pluginType")
                 if let dataProviderDesignatedRequirement = config.contentFilter.provider.value(forKeyPath: "dataProviderDesignatedRequirement") {
@@ -67,7 +70,9 @@ func getAllNetworkExtensions() -> [String:Any] {
                 appConfig["enabled"] = (config.contentFilter.enabled != 0)
                 appConfig["contentFilter"] = typeInfo
             } else if (config.dnsProxy != nil) { // dnsProxy Extensions
-                foundDnsProxyIdentifiers.append(config.application)
+                if application != nil {
+                    foundDnsProxyIdentifiers.append(application!)
+                }
                 appConfig["type"] = "dnsProxy"
                 // dnsProxy = type 6
                 if let type = config.dnsProxy.protocol.value(forKeyPath: "type") {
@@ -113,7 +118,9 @@ func getAllNetworkExtensions() -> [String:Any] {
                 appConfig["enabled"] = (config.dnsProxy.enabled != 0)
                 appConfig["dnsProxy"] = typeInfo
             } else if (config.vpn != nil) { // VPN Extensions
-                foundVPNIdentifiers.append(config.application)
+                if application != nil {
+                    foundVPNIdentifiers.append(application!)
+                }
                 appConfig["type"] = "vpn"
                 // app-proxy = type 4
                 if let type = config.vpn.protocol.value(forKeyPath: "type") {
@@ -171,7 +178,9 @@ func getAllNetworkExtensions() -> [String:Any] {
                 appConfig["enabled"] = (config.vpn.enabled != 0)
                 appConfig["VPN"] = typeInfo
             } else { // Unknown Extensions
-                foundUnknownIdentifiers.append(config.application)
+                if application != nil {
+                    foundUnknownIdentifiers.append(application!)
+                }
             }
             if dumpRaw {
                 dumpConfig[(key as! UUID).uuidString] = value

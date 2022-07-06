@@ -21,32 +21,22 @@ func getAllNetworkExtensions() -> [String:Any] {
     var loadedConfigurations = [NEConfiguration]()
     let sharedManager = NEConfigurationManager.self.shared()
     
-    if #available(macOS 13, *) {
-        _ = NEConfigurationManager.init(synchronous: ())
-        sharedManager!.loadConfigurations(
-            withCompletionQueue: DispatchQueue(label: "Network Extension Service Queue"),
-            handler: { (configurations: [NEConfiguration]?, error: Error?) -> Void in
-                processConfigurations(configurations: configurations)
-            }
-        )
-        while configs.isEmpty {
-            Thread.sleep(forTimeInterval: 0.001)
-            retries -= 1
-            if retries == 0 {
-                print("Could not load Network Extension configurations!")
-                exit(1)
-            }
+    _ = NEConfigurationManager.init(synchronous: ())
+    sharedManager!.loadConfigurations(
+        withCompletionQueue: DispatchQueue(label: "Network Extension Service Queue"),
+        handler: { (configurations: [NEConfiguration]?, error: Error?) -> Void in
+            processConfigurations(configurations: configurations)
         }
-        loadedConfigurations = configs
-    } else {
-        _ = sharedManager?.reloadFromDisk()
-        let loadedConfigurationsHash = sharedManager?.loadedConfigurations
-        if loadedConfigurationsHash != nil {
-            for (_, value) in loadedConfigurationsHash! as NSDictionary {
-                loadedConfigurations.append(value as! NEConfiguration)
-            }
+    )
+    while configs.isEmpty {
+        Thread.sleep(forTimeInterval: 0.001)
+        retries -= 1
+        if retries == 0 {
+            print("Could not load Network Extension configurations!")
+            exit(1)
         }
     }
+    loadedConfigurations = configs
 
     if !loadedConfigurations.isEmpty {
         for config in loadedConfigurations {

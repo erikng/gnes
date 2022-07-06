@@ -13,11 +13,15 @@
 @class NSObject, NSDictionary;
 
 @interface NEConfigurationManager : NSObject {
-	NSDictionary* _loadedConfigurations;
+    NSObject<OS_dispatch_queue> * _changedQueue;
+    NSMutableDictionary * _loadedConfigurations;
+    NSObject<OS_dispatch_queue> * _queue;
 }
 
 +(NEConfigurationManager *)sharedManager;
 -(NSDictionary *)loadedConfigurations;
 @property (retain) NSDictionary * loadedConfigurations;                                //@synthesize loadedConfigurations=_loadedConfigurations - In the implementation block
 -(char)reloadFromDisk;
+-(id)initSynchronous;
+- (void)loadConfigurationsWithCompletionQueue:(dispatch_queue_t)completionQueue handler:(void (^)(NSArray<NEConfiguration *> * _Nullable configurations, NSError * _Nullable error))handler;
 @end

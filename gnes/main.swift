@@ -63,7 +63,13 @@ OPTIONS
                 None passed: Returns standard Network Extension(s) data in Swift printed format
 """
 
-let arguments = CommandLine.arguments
+var arguments = CommandLine.arguments
+arguments.removeFirst()
+if arguments.isEmpty {
+    print(helpInfo)
+    exit(1)
+}
+
 if arguments.contains("-raw") {
     dumpRaw = true
 }
@@ -93,9 +99,6 @@ if arguments.contains("-dump") {
     identifier = arguments[identifierArg! + 1]
     let typeArg = arguments.firstIndex(where: {$0 == "-type"})
     type = arguments[typeArg! + 1]
-} else {
-    print(helpInfo)
-    exit(1)
 }
 
 for (_, value) in NetworkExtensionData {

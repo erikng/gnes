@@ -8,18 +8,52 @@
 import Foundation
 import NetworkExtension
 
+var configs: [NEConfiguration] = []
+var retries = 2000
+
+func processConfigurations(configurations: [NEConfiguration]?) {
+    for configuration in configurations ?? [] {
+        configs.append(configuration)
+    }
+}
+
 func getAllNetworkExtensions() -> [String:Any] {
+    var loadedConfigurations = [NEConfiguration]()
     let sharedManager = NEConfigurationManager.self.shared()
-    _ = sharedManager?.reloadFromDisk()
-    let loadedConfigurations = sharedManager?.loadedConfigurations
-    if loadedConfigurations != nil {
-        for (key, value) in loadedConfigurations! as NSDictionary {
+    
+    if #available(macOS 13, *) {
+        _ = NEConfigurationManager.init(synchronous: ())
+        sharedManager!.loadConfigurations(
+            withCompletionQueue: DispatchQueue(label: "Network Extension Service Queue"),
+            handler: { (configurations: [NEConfiguration]?, error: Error?) -> Void in
+                processConfigurations(configurations: configurations)
+            }
+        )
+        while configs.isEmpty {
+            Thread.sleep(forTimeInterval: 0.001)
+            retries -= 1
+            if retries == 0 {
+                print("Could not load Network Extension configurations!")
+                exit(1)
+            }
+        }
+        loadedConfigurations = configs
+    } else {
+        _ = sharedManager?.reloadFromDisk()
+        let loadedConfigurationsHash = sharedManager?.loadedConfigurations
+        if loadedConfigurationsHash != nil {
+            for (_, value) in loadedConfigurationsHash! as NSDictionary {
+                loadedConfigurations.append(value as! NEConfiguration)
+            }
+        }
+    }
+
+    if !loadedConfigurations.isEmpty {
+        for config in loadedConfigurations {
             // reset these keys every time to properly capture
             appConfig = [:]
             providerInfo = [:]
             typeInfo = [:]
-            var rawConfig = NEConfiguration()
-            let config = value as! NEConfiguration
             let application = config.application
             
             // Base values for all Network Extensions
@@ -183,9 +217,9 @@ func getAllNetworkExtensions() -> [String:Any] {
                 }
             }
             if dumpRaw {
-                dumpConfig[(key as! UUID).uuidString] = value
+                dumpConfig[(config.identifier!).uuidString] = config
             } else {
-                dumpConfig[(key as! UUID).uuidString] = appConfig
+                dumpConfig[(config.identifier!).uuidString] = appConfig
             }
         }
     } else {

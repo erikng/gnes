@@ -60,7 +60,9 @@ func getAllNetworkExtensions() -> [String:Any] {
                 payloadInfo["profileUUID"] = config.payloadInfo.profileUUID
                 payloadInfo["profileIdentifier"] = config.payloadInfo.profileIdentifier
                 payloadInfo["isSetAside"] = (config.payloadInfo.isSetAside != 0)
-                payloadInfo["profileIngestionDate"] = (config.payloadInfo.profileIngestionDate.toString(dateFormat: "yyyy-MM-dd HH:mm:ss Z"))
+                if config.payloadInfo.profileIngestionDate != nil {
+                    payloadInfo["profileIngestionDate"] = (config.payloadInfo.profileIngestionDate.toString(dateFormat: "yyyy-MM-dd HH:mm:ss Z"))
+                }
                 payloadInfo["systemVersion"] = config.payloadInfo.systemVersion
                 if config.payloadInfo.profileSource == 2 {
                     payloadInfo["profileSource"] = "mdm"
